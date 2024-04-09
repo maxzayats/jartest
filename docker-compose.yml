@@ -1,0 +1,20 @@
+version: '3.9'
+
+networks:
+  simple-backend:
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: note
+      POSTGRES_PASSWORD: 2222
+      POSTGRES_DB: notes
+      PGDATA: /src/main/resources/database
+    ports:
+      - "5432:5432"
+    networks:
+      - simple-backend

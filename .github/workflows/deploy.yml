@@ -1,0 +1,41 @@
+name: Deploy with Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build the Docker image
+        run: docker-compose build
+
+      - name: Start the Docker containers
+        run: docker-compose up -d
+
+      - name: Run jar
+        run: java -jar simple-0.0.1-SNAPSHOT.jar
+
+      - name: Displaying list of running containers
+        run: docker ps
+
+      - name: Install telnet
+        run: sudo apt-get install telnet
+
+      - name: Checking port 8080
+        run: telnet localhost 8080
